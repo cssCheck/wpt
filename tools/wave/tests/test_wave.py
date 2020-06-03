@@ -26,17 +26,24 @@ def is_port_8080_in_use():
     return False
 
 def test_serve():
+    print("Checking port")
     if is_port_8080_in_use():
         assert False, "WAVE Test Runner failed: Port 8080 already in use."
+    print("Port good")
 
+    print("Calling serve-wave")
     p = subprocess.Popen([os.path.join(wpt.localpaths.repo_root, "wpt"),
         "serve-wave",
         "--config",
-        os.path.join(wpt.localpaths.repo_root, "tools/wave/tests/config.json")])
+        os.path.join(wpt.localpaths.repo_root, "tools/wave/tests/config.json")],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT
+    )
 
     start = time.time()
     try:
         while True:
+            print("Polling server...")
             if p.poll() is not None:
                 assert False, "WAVE Test Runner failed: Server not running."
             if time.time() - start > 6 * 60:
@@ -52,3 +59,5 @@ def test_serve():
                 break
     finally:
         p.terminate()
+        output, _ = p.communicate()
+        print(output)
