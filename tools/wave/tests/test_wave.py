@@ -32,11 +32,12 @@ def test_serve():
     print("Port good")
 
     print("Calling serve-wave")
+    f = open("/tmp/log.txt", "w")
     p = subprocess.Popen([os.path.join(wpt.localpaths.repo_root, "wpt"),
         "serve-wave",
         "--config",
         os.path.join(wpt.localpaths.repo_root, "tools/wave/tests/config.json")],
-        stdout=subprocess.PIPE,
+        stdout=f, #subprocess.PIPE,
         stderr=subprocess.STDOUT
     )
 
@@ -45,17 +46,21 @@ def test_serve():
         while True:
             print("Polling server...")
             if p.poll() is not None:
+                print('p.poll() returned non-None')
                 assert False, "WAVE Test Runner failed: Server not running."
             if time.time() - start > 10 * 60:
+                print('TIMED OUT')
                 assert False, "WAVE Test Runner failed: Server did not start responding within 6m."
             try:
                 resp = urlopen("http://web-platform.test:8080/_wave/api/sessions/public")
+                print('Got a response:')
                 print(resp)
             except URLError:
                 print("Server not responding, waiting another 10s.")
                 time.sleep(10)
             else:
                 assert resp.code == 200
+                print('SUCCESS')
                 break
     finally:
         p.terminate()
