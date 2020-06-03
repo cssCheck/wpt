@@ -46,7 +46,7 @@ def test_serve():
             print("Polling server...")
             if p.poll() is not None:
                 assert False, "WAVE Test Runner failed: Server not running."
-            if time.time() - start > 6 * 60:
+            if time.time() - start > 10 * 60:
                 assert False, "WAVE Test Runner failed: Server did not start responding within 6m."
             try:
                 resp = urlopen("http://web-platform.test:8080/_wave/api/sessions/public")

@@ -4,6 +4,7 @@ import subprocess
 from manifest import manifest
 import localpaths
 import logging
+import time
 import os
 
 try:
@@ -104,7 +105,10 @@ def is_wptreport_installed():
 def load_manifest():
     root = localpaths.repo_root
     path = os.path.join(root, "MANIFEST.json")
-    manifest_file = manifest.load_and_update(root, path, "/", parallel=False)
+    before = time.time()
+    manifest_file = manifest.load_and_update(root, path, "/", parallel=True)
+    after = time.time()
+    logger.debug("Loading manifest took %s seconds" % (after - before))
 
     supported_types = ["testharness", "manual"]
     data = {"items": {},
