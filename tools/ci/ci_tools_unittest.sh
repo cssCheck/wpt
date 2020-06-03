@@ -13,6 +13,8 @@ run_applicable_tox () {
     unset TOXENV
     local RUN_ENVS=$(tox -l | grep "^${OLD_TOXENV}\(\-\|\$\)" | tr "\n" ",")
     if [[ -n "$RUN_ENVS" ]]; then
+        # Hack.
+        ../wpt make-hosts-file | sudo tee -a /etc/hosts
         tox -e "$RUN_ENVS" wave/tests/test_wave.py || echo "failed, ignoring"
         cat /tmp/log.txt
     fi
