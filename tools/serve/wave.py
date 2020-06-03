@@ -24,6 +24,7 @@ def get_route_builder_func(report):
         builder = serve.get_route_builder(aliases)
         logger.debug("Loading manifest ...")
         data = load_manifest()
+        logger.debug("Loaded manifest, launching WaveServer")
         from ..wave.wave_server import WaveServer
         wave_server = WaveServer()
         wave_server.initialize(
@@ -41,6 +42,7 @@ def get_route_builder_func(report):
         if not web_root.startswith("/"):
             web_root = "/" + web_root
 
+        logger.debug("Creating WaveHandler")
         wave_handler = WaveHandler()
         builder.add_handler("*", web_root + "*", wave_handler)
         # serving wave specifc testharnessreport.js
