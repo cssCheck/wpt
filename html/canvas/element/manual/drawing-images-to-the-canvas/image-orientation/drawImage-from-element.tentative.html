@@ -5,23 +5,16 @@
 <title>createImageBitmap and drawImage from an element source with image orientation: from-image</title>
 <link rel="author" title="Stephen Chenney" href="mailto:schenney@chromium.org">
 <link rel="help" href="https://drafts.csswg.org/css-images-3/#propdef-image-orientation">
-<link rel="match" href="reference/drawImage-from-bitmap-ref.html">
+<link rel="match" href="drawImage-from-element-ref.html">
   <script>
-    image = new Image();
-    image.src = "/css/css-images/image-orientation/support/exif-orientation-3-lr.jpg";
+    window.onload = () => {
+      const img = document.getElementById('img-element');
 
-    let imageLoadPromise = new Promise(resolve => {
-      image.onload = resolve;
-    });
-    let contentLoadedPromise = new Promise(resolve => {
-      window.addEventListener('DOMContentLoaded', resolve);
-    });
-    Promise.all([imageLoadPromise, contentLoadedPromise]).then( function() {
       const can = document.getElementById('bitmap-canvas');
-      can.height = 50;
-      can.width = 100;
-      can.getContext('2d').drawImage(image, 0, 0);
-    })
+      can.height = img.height;
+      can.width = img.width;
+      can.getContext('2d').drawImage(img, 0, 0);
+    };
   </script>
 </head>
 <body>
